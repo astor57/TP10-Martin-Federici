@@ -14,7 +14,15 @@ app.use(express.json()); // Middleware para parsear y comprender JSON
 
 // Acá abajo poner todos los EndPoints
 app.get('/api/alumnos/', async (req, res) => {
-    // Lógica aquí
+    const client= new Client(config);
+    try{
+        await client.connect();
+        const sql= 'SELECT * FROM Alumnos';
+        const resultPg= await client.query(sql);
+    }
+    catch (){
+        client.end();
+    }
     res.send("GET todos los alumnos");
 });
 
@@ -46,3 +54,12 @@ app.delete('/api/alumnos/:id', async (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
+
+const client = new Client (config);
+await client.connect();
+
+let sql = `SELECT * from provinces`; // `... limit 5` let result = await client.query(sql);
+let result = await client.query(sql);
+await client.end();
+// 'rows' es un array. rows[0] el 1oer registro. console.log(result.rows);
+console.log(result.rows);
